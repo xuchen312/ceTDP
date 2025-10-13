@@ -1,4 +1,4 @@
-# OHBM 2025 Educational Course: ClusterTDP
+# CTP-RFT
 
 This repository provides a detailed guide for estimating the lower bound on the true discovery proportion (TDP), i.e., the proportion of truly activated voxels within each cluster, using two complementary approaches: **ClusterTDP** and **TDPClusters**. The results are compatible with standard cluster inference workflows, while additionally offering activation quantification through TDP estimates.
 
@@ -62,7 +62,7 @@ This repository provides a detailed guide for estimating the lower bound on the 
   - ```-T``` Global time limit in seconds (use ```0``` to disable the time limit),
   - ```-N``` No improvement time threshold in seconds (recommended: ```60```),
   - ```-k``` k-value = min. significant cluster size − 1 (from **ClusterTDP**),
-  - ```file``` Input cluster file in CSV/TSV format (see ```WriteClusterFiles.m``` for instructions on how to create these files).
+  - ```file``` Input cluster file in CSV/TSV format (function ```WriteClusterFiles``` can be used to create these files).
   
 - **Outputs** (*optional; must use none or all for interactive exploration*)
   - ```minscore``` Estimated TDN = TDP × cluster size.
