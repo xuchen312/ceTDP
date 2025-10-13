@@ -1,36 +1,38 @@
-%--------- Compute approximate TDP bounds using TDPClusters
+function WriteClusterFiles(minClusSz,xSPM,cdt)
+% Generate cluster information CSV files.
+% 
+% INPUTS:
+% minClusSz - Minimum significant cluster size (extracted from ClusterTDP)
+%
+% Inputs (optional):
+% xSPM      - Structure containing SPM, distribution & filtering details
+% cdt       - Cluster defining threshold (CDT)
+%             If less than zero, u is taken to be uncorrected P-value
+%
 
-%--- a) Specify CFT/CDF
-cft = 0.001;
-if ~exist('SPM','var') | isempty(SPM)
-    load(spm_select(1,'SPM.mat','Select SPM.mat'));
+%--- 1) Check inputs
+if nargin < 1
+    error('Please specify the mandatory input ''minClusSz''.');
 end
-if length(SPM.xCon) > 1
-    c = spm_input('Select contrast (index):','+0','i',1,1);
-else
-    c = 1;
+if nargin < 2 | isempty(xSPM)
+  [~,xSPM] = spm_getSPM;
 end
-switch SPM.xCon(c).STAT
-    case 'T'
-        df = [1 SPM.xX.erdf];
-    case 'F'
-        df = [rank(SPM.xCon(c).c) SPM.xX.erdf];
-    case 'X'
-        df = SPM.xX.erdf;
-    otherwise
-        error('Unsupported statistic type.');
+if nargin < 3 | isempty(cdt)
+    cdt = xSPM.u;
 end
-cft = spm_u(cft, df, SPM.xCon(c).STAT);  % convert p-value to statistic
+% if CDT is below 1, assume this to be a p-value
+if cdt <= 1
+    cdt = spm_u(cdt,xSPM.df,xSPM.STAT);
+end
 
-%--- b) Extract k-value from ClusterTDP-SPM output (minClusSz = minimum significant cluster size)
+%--- 2) k-value = minClusSz-1
 kval = minClusSz-1;
 
-%--- c) Generate cluster info files
-V = spm_vol(fullfile(SPM.swd, SPM.xCon(1).Vspm.fname));
-Tmap = spm_read_vols(V);
+%--- 3) Generate cluster info files
+Tmap = spm_read_vols(spm_vol(fullfile(xSPM.swd,xSPM.Vspm.fname)));
 
-% apply CFT & generate clusters
-Tmap(Tmap<cft) = 0;
+% apply CDT & generate clusters
+Tmap(Tmap<cdt) = 0;
 [L,NUM] = spm_bwlabel(Tmap);
 % iterate through clusters & export cluster info files
 for i = 1:NUM
@@ -46,3 +48,5 @@ for i = 1:NUM
         fclose(fileID);
     end
 end
+
+return
