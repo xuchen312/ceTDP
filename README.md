@@ -16,33 +16,38 @@ and the corresponding software paper:
 
 This project includes multiple implementations across different programming environments, contributed by different authors.
 
+Note: Function names may vary across implementations. See the mapping table below. Different implementations use language-specific function names; however, all are explicitly mapped to the corresponding methodological components (ceTDP_appr and ceTDP_cons).
+
 ---
 
 ## Available Tools
 
 ### Stage 1: Cluster Extent Threshold Computation
 
-| Tool | Language | Description | Link | Author |
-|------|----------|------------|------|--------|
-| ceTDP-k-MATLAB | MATLAB | Parametric | [GitHub](LINK) | XC |
-| ceTDP-k-FSL | FSL | Parametric | [GitHub](LINK) | XC |
-| ceTDP-k-R | R | Nonparametric | [GitHub](LINK) | XC |
+| Tool | Language | Description | Executable | Repository | Author |
+|------|----------|-------------|------------|------------|--------|
+| ceTDP-k-MATLAB | MATLAB | Parametric | xxx | [ceTDP-k](https://github.com/xuchen312/ceTDP-k) | XC |
+| ceTDP-k-FSL | FSL | Parametric | xxx | [ceTDP-k](https://github.com/xuchen312/ceTDP-k) | XC |
+| ceTDP-k-R | R | Nonparametric | xxx | [ceTDP-k](https://github.com/xuchen312/ceTDP-k) | XC |
 
 ### Stage 2: TDP Bound Estimation
 
-#### Conservative Estimate
+The software provides two methodological variants:
 
-| Tool | Language | Link | Author |
-|------|----------|------|--------|
-| ceTDP-Cons-MATLAB | MATLAB | [ceTDP-Cons-SPM](https://github.com/xuchen312/ceTDP-Cons-SPM) | XC |
-| ceTDP-Cons-C | C | [ceTDP-Cons-C](LINK) | RM & XC |
-| ceTDP-Cons-R | R | [ceTDP-Cons-R](LINK) | JJG & XC |
+#### ceTDP-cons
 
-#### Approximate Estimate
+| Tool | Language | Executable | Repository | Author |
+|------|----------|------------|------------|--------|
+| ceTDP-cons-MATLAB | MATLAB | xxx | [ceTDP-cons-SPM](https://github.com/xuchen312/ceTDP-cons-SPM) | XC |
+| ceTDP-cons-C | C | `lb` | [ceTDP-cons-C](LINK) | RM & XC |
+| ceTDP-cons-R | R | xxx | [ceTDP-cons-R](LINK) | JJG & XC |
+| ceTDP-cons-Python | `lowerbounds.py` | Python | [ceTDP-cons-Python](LINK) | PG |
 
-| Tool | Language | Link | Author |
-|------|----------|------|--------|
-| ceTDP-Appr-C | C | [ceTDP-Appr-C]([LINK](https://github.com/ppgorecki/ceTDP-Appr)) | PG |
+#### ceTDP-appr
+
+| Tool | Language | Executable | Repository | Author |
+|------|----------|------------|------------|--------|
+| ceTDP-appr-C | C | `fgreedy` | [ceTDP-appr-C]([LINK](https://github.com/ppgorecki/ceTDP-appr)) | PG |
 
 ---
 
@@ -64,17 +69,17 @@ If you use this software, please cite: [Method paper](https://doi.org/10.1093/jr
 
 
 
-## ceTDP-Cons
+## ceTDP-cons
 
-**ceTDP-Cons** uses a fast, non-iterative exact algorithm that provides a conservative TDP bound while maintaining strict FWER control.
+**ceTDP-cons** uses a fast, non-iterative exact algorithm that provides a conservative TDP bound while maintaining strict FWER control.
 
-## ceTDP-Appr
+## ceTDP-appr
 
-**ceTDP-Appr** uses a two-phase heuristic algorithm that computes an approximate (and potentially tighter) TDP bound.
+**ceTDP-appr** uses a two-phase heuristic algorithm that computes an approximate (and potentially tighter) TDP bound.
 
 ### Installation
 
-- Go to the project page: [ceTDP-Appr](https://github.com/ppgorecki/ceTDP-Appr).
+- Go to the project page: [ceTDP-appr](https://github.com/ppgorecki/ceTDP-appr).
 
 - Download the standalone tool from the repository.
 
