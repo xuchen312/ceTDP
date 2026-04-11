@@ -2,6 +2,13 @@
 
 This repository provides a detailed guide for estimating the lower bound on the true discovery proportion (TDP), i.e., the proportion of truly activated voxels within each cluster, using two complementary approaches: **ceTDP-con** and **ceTDP-appr**. Here, the clusters can be supra-threshold clusters, anatomical regions, or arbitrary user-defined regions. The results are compatible with standard cluster inference workflows, while additionally offering activation quantification through TDP estimates.
 
+## Implementations
+
+- **ceTDP-cons** uses a fast, non-iterative exact algorithm that provides a conservative TDP bound while maintaining strict FWER control.
+
+- **ceTDP-appr** uses a two-phase heuristic algorithm that computes an approximate (and potentially tighter) TDP bound.
+  *Note:* The algorithm is heuristic and may not converge to the global optimum, so error guarantees may not always hold if insufficient runtime is allocated.
+
 ## Software Suite Overview
 
 This repository provides an overview all software implementations of the method described in:
@@ -34,20 +41,20 @@ Note: Function names may vary across implementations. See the mapping table belo
 
 The software provides two methodological variants:
 
-#### ceTDP-cons
+- **ceTDP-cons** provides valid statistical guarantees:
 
-| Tool | Language | Executable | Repository | Author |
-|------|----------|------------|------------|--------|
-| ceTDP-cons-MATLAB | MATLAB | xxx | [ceTDP-cons-SPM](https://github.com/xuchen312/ceTDP-cons-SPM) | XC |
-| ceTDP-cons-C | C | `lb` | [ceTDP-cons-C](LINK) | RM & XC |
-| ceTDP-cons-R | R | xxx | [ceTDP-cons-R](LINK) | JJG & XC |
-| ceTDP-cons-Python | `lowerbounds.py` | Python | [ceTDP-cons-Python](LINK) | PG |
+  | Tool | Language | Executable | Repository | Author |
+  |------|----------|------------|------------|--------|
+  | ceTDP-cons-MATLAB | MATLAB | xxx | [ceTDP-cons-SPM](https://github.com/xuchen312/ceTDP-cons-SPM) | XC |
+  | ceTDP-cons-C | C | `lb` | [ceTDP-cons-C](LINK) | RM & XC |
+  | ceTDP-cons-R | R | xxx | [ceTDP-cons-R](LINK) | JJG & XC |
+  | ceTDP-cons-Python | Python | `lowerbounds.py` | [ceTDP-cons-Python](LINK) | PG |
 
-#### ceTDP-appr
+- **ceTDP-appr** produces tighter but heuristic bounds:
 
-| Tool | Language | Executable | Repository | Author |
-|------|----------|------------|------------|--------|
-| ceTDP-appr-C | C | `fgreedy` | [ceTDP-appr-C]([LINK](https://github.com/ppgorecki/ceTDP-appr)) | PG |
+  | Tool | Language | Executable | Repository | Author |
+  |------|----------|------------|------------|--------|
+  | ceTDP-appr-C | C | `fgreedy` | [ceTDP-appr-C]([LINK](https://github.com/ppgorecki/ceTDP-appr)) | PG |
 
 ---
 
@@ -64,55 +71,3 @@ General workflow:
 ## Citation
 
 If you use this software, please cite: [Method paper](https://doi.org/10.1093/jrsssb/qkad067) and [Software paper]().
-
-
-
-
-
-## ceTDP-cons
-
-**ceTDP-cons** uses a fast, non-iterative exact algorithm that provides a conservative TDP bound while maintaining strict FWER control.
-
-## ceTDP-appr
-
-**ceTDP-appr** uses a two-phase heuristic algorithm that computes an approximate (and potentially tighter) TDP bound.
-
-### Installation
-
-- Go to the project page: [ceTDP-appr](https://github.com/ppgorecki/ceTDP-appr).
-
-- Download the standalone tool from the repository.
-
-- Open a terminal, navigate to the tool directory, and run:
-  ```
-  cd upperbounds
-  make
-  ```
-  
-### General Usage
-
-- **Syntax**:
-  ```
-  ./fgreedy -x batch7.cnf -T0 -N60 –k[kval] [file]
-  ```
-- **Inputs** (*optional*)
-  - ```batch7.cnf``` Configuration file specifying parameters and rules essential for the algorithm,
-  - ```-T``` Global time limit in seconds (use ```0``` to disable the time limit),
-  - ```-N``` No improvement time threshold in seconds (recommended: ```60```),
-  - ```-k``` k-value = min. significant cluster size − 1 (from **ClusterTDP**),
-  - ```file``` Input cluster file in CSV/TSV format (function ```WriteClusterFiles``` can be used to create these files).
-  
-- **Outputs** (*optional; must use none or all for interactive exploration*)
-  - ```minscore``` Estimated TDN = TDP × cluster size.
-  
-- **Example**
-  ```
-  ./fgreedy -x batch7.cnf -T0 -N60 –k128 clus1.csv
-  ```
-  
-- **Note:**
-  The algorithm is heuristic and may not converge to the global optimum, so error guarantees may not always hold.
-
-## Found bugs? Any questions?
-
-Please contact Xu Chen at xuchen312@gmail.com.
