@@ -45,7 +45,7 @@ The software provides two methodological variants:
 
   | Tool | Language | Executable | Repository | Author |
   |------|----------|------------|------------|--------|
-  | ceTDP-cons-MATLAB | MATLAB | xxx | [ceTDP-cons-SPM](https://github.com/xuchen312/ceTDP-cons-SPM) | XC |
+  | ceTDP-cons-SPM | MATLAB | `spm_ceTDP_cons.m` | [ceTDP-cons-SPM](https://github.com/xuchen312/ceTDP-cons-SPM) | XC |
   | ceTDP-cons-C | C | `lb` | [ceTDP-cons-C](LINK) | RM & XC |
   | ceTDP-cons-R | R | xxx | [ceTDP-cons-R](LINK) | JJG & XC |
   | ceTDP-cons-Python | Python | `lowerbounds.py` | [ceTDP-cons-Python](LINK) | PG |
