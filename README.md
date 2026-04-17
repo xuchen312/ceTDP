@@ -45,8 +45,8 @@ This project includes multiple implementations across different programming envi
 
 Function and executable names vary across implementations. All tools are mapped to the following methodological components:
 
-- **ceTDP_cons** (conservative bounds)
-- **ceTDP_appr** (approximate bounds)
+- **ceTDP-cons** (conservative bounds)
+- **ceTDP-appr** (approximate bounds)
 
 ---
 
