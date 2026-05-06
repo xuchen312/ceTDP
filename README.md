@@ -62,7 +62,7 @@ Stage 1 tools compute **intermediate quantities** (i.e., cluster extent threshol
 |------|----------|-------------|---------|------------|--------|
 | ceTDP-k-SPM | MATLAB | Parametric | `spm_ceTDP_minsize.m` | [ceTDP-k](https://github.com/xuchen312/ceTDP-k) | XC (modified implementation) |
 | ceTDP-k-FSL | FSL | Parametric | `smoothest` + `cluster` | [ceTDP-k](https://github.com/xuchen312/ceTDP-k) | XC (pipeline using FSL tools) |
-| ceTDP-k-R | R | Nonparametric | xxx | [ceTDP-k](https://github.com/xuchen312/ceTDP-k) | XC |
+| ceTDP-k-R | R | Nonparametric | `kval.R` | [ceTDP-k](https://github.com/xuchen312/ceTDP-k) | XC |
 
 The input to Stage 2 also requires the definition of regions of interest (ROIs), which can be arbitrary regions. For each ROI, its overlap with significant supra-threshold clusters (identified via standard cluster inference) is computed and used as input for Stage 2.
 
