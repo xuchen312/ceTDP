@@ -54,7 +54,7 @@ Function and executable names vary across implementations. All tools are mapped 
 
 Command denotes the main command, script, function, or executable used to run each implementation.
 
-### Stage 1: Cluster Extent Threshold Computation
+### Stage 1: Cluster Extent Threshold Computation (ceTDP-k)
 
 Stage 1 tools compute **intermediate quantities** (i.e., cluster extent thresholds) required as input for Stage 2. These outputs are essential for the subsequent estimation of TDN/TDP bounds and are typically derived from parametric or nonparametric cluster inference procedures.
 
@@ -85,6 +85,72 @@ The software provides two methodological variants:
 |------|----------|---------|------------|--------|
 | ceTDP-appr-C | C | `fgreedy` | [ceTDP-appr-C]([LINK](https://github.com/ppgorecki/ceTDP-appr)) | PG |
 
+## Auxiliary Utilities
+
+The repository also provides utility scripts for preprocessing and exporting cluster information for downstream ceTDP analyses.
+
+These tools are not part of the core inferential procedures, but facilitate integration with arbitrary ROI definitions and external pipelines.
+
+| Tool | Language | Description | Command | Repository | Author |
+|------|----------|-------------|---------|------------|--------|
+| ceTDP-cluster-export | Python | Export voxel coordinates for supra-threshold clusters and ROI-overlapping subclusters from NIfTI statistical maps | `cluster_export.py` | current repository | XC |
+
+### Cluster Export Utility (`cluster_export.py`)
+
+This utility extracts connected supra-threshold voxel clusters from statistical NIfTI images and exports voxel coordinates for downstream analyses.
+
+Features include:
+
+- whole-brain cluster extraction
+- ROI-constrained subcluster extraction
+- configurable 3D connectivity (6/18/26)
+- voxel and MNI/world coordinates
+- command-line interface
+- compatibility with arbitrary NIfTI statistical maps
+
+#### Installation
+
+Install Python dependencies:
+
+```python
+pip install nibabel numpy pandas scipy
+```
+
+#### Basic usage
+
+Whole-brain clustering:
+
+```bash
+python cluster_export.py \
+    --input spmT_0001.nii \
+    --cdt 3.1 \
+    --extent 20
+```
+
+ROI-constrained clustering:
+
+```bash
+python cluster_export.py \
+    --input spmT_0001.nii \
+    --roi AAL.nii.gz \
+    --cdt 3.1 \
+    --extent 20
+```
+
+#### Output
+
+CSV files are written to:
+
+```bash
+clusters/
+```
+
+Each CSV contains voxel coordinates:
+
+```
+i,j,k
+```
+
 ---
 
 ## Installation & Usage
@@ -96,13 +162,15 @@ Each tool is maintained in its own repository. Please refer to the corresponding
 1. Run a Stage 1 tool:
    - Compute intermediate quantities required for Stage 2 inference
    - Define ROIs for subsequent analysis
+  
+2. (Optional) Use preprocessing utilities to export supra-threshold clusters or ROI-overlapping subclusters
 
-2. Run a Stage 2 tool:
+3. Run a Stage 2 tool:
    - **ceTDP-cons** (statistically guaranteed)
    - **ceTDP-appr** (heuristic but potentially tighter)
 
-3. Convert TDN to TDP if needed  
-4. Visualize results
+4. Convert TDN to TDP if needed  
+5. Visualize results
 
 ## Citation
 
