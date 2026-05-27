@@ -66,9 +66,6 @@ if nargin >= 4 && ~isempty(ROI)
                 end
                 fprintf(fileID, 'x,y,z\n');
                 fprintf(fileID,'%d,%d,%d\n',[x y z]');
-                %for l = 1:length(x)
-                %    fprintf(fileID,'%d,%d,%d\n',x(l),y(l),z(l));
-                %end
                 fclose(fileID);
             end
         end
@@ -89,9 +86,6 @@ else
             end
             fprintf(fileID, 'x,y,z\n');
             fprintf(fileID,'%d,%d,%d\n',[x y z]');
-            %for j = 1:length(x)
-            %    fprintf(fileID,'%d,%d,%d\n',x(j),y(j),z(j));
-            %end
             fclose(fileID);
         end
     end
