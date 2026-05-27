@@ -94,6 +94,7 @@ These tools are not part of the core inferential procedures, but facilitate inte
 | Tool | Language | Description | Command | Repository | Author |
 |------|----------|-------------|---------|------------|--------|
 | ceTDP-cluster-export | Python | Export voxel coordinates for supra-threshold clusters and ROI-overlapping subclusters from NIfTI statistical maps | `cluster_export.py` | current repository | XC |
+| ceTDP-vis | Python | Generate layered ceTDP visualization maps using cluster-level TDP estimates | `cetdp_vis.py` | current repository | XC |
 
 ### Cluster Export Utility (`cluster_export.py`)
 
@@ -148,8 +149,132 @@ clusters/
 Each CSV contains voxel coordinates:
 
 ```
-i,j,k
+x,y,z
 ```
+
+### ceTDP Visualization Utility (`cetdp_vis.py`)
+
+This utility generates layered voxelwise ceTDP visualization maps from cluster label images and cluster-level TDP estimates.
+
+For each cluster:
+
+- interior voxels are assigned conservative ceTDP-cons TDP values
+- inner boundary voxels are assigned approximate ceTDP-appr TDP values
+
+The resulting NIfTI image can be visualized using standard neuroimaging software such as FSLeyes, MRIcroGL, or nilearn.
+
+#### Features
+
+- layered ceTDP visualization
+- inner-boundary enhancement
+- configurable 3D connectivity (6/18/26)
+- command-line interface
+- direct NIfTI output
+- compatibility with arbitrary cluster label images
+
+#### Installation
+
+Install Python dependencies:
+
+```bash
+pip install nibabel numpy pandas scipy
+```
+
+#### Input
+
+The utility requires:
+
+1. A cluster label NIfTI image:
+
+```text
+clus.nii.gz
+```
+
+Voxel values should correspond to cluster labels:
+
+- 0 = background
+- positive integers = cluster IDs
+
+2. A CSV table containing cluster-level TDP values:
+
+```csv
+cluster_id,tdp1,tdp2
+21,0.018,0.158
+22,0.223,0.312
+23,0.205,0.296
+```
+
+where:
+
+- `tdp1` = ceTDP-cons TDP estimate
+- `tdp2` = ceTDP-appr TDP estimate
+
+#### Basic usage
+
+```bash
+python cetdp_vis.py \
+    --cluster clus.nii.gz \
+    --table tdp_values.csv
+```
+
+#### Custom output
+
+```bash
+python cetdp_vis.py \
+    --cluster clus.nii.gz \
+    --table tdp_values.csv \
+    --output output/cetdp_vis.nii.gz
+```
+
+#### Connectivity options
+
+```bash
+python cetdp_vis.py \
+    --cluster clus.nii.gz \
+    --table tdp_values.csv \
+    --connectivity 6
+```
+
+Supported connectivity values:
+
+- 6
+- 18
+- 26 (default)
+
+#### Output
+
+The utility generates a voxelwise layered visualization map:
+
+```text
+cetdp_vis.nii.gz
+```
+
+Voxel values correspond to:
+
+- cluster interior → ceTDP-cons values
+- inner boundary → ceTDP-appr values
+- background → 0
+
+#### Visualization
+
+The output NIfTI image can be visualized using:
+
+- FSLeyes
+- MRIcroGL
+- nilearn
+- ITK-SNAP
+
+Example:
+
+```bash
+fsleyes cetdp_vis.nii.gz
+```
+
+#### Visualization rationale
+
+The layered visualization strategy combines conservative ceTDP-cons estimates within cluster interiors with potentially tighter ceTDP-appr estimates along cluster boundaries.
+
+This rendering approach visually highlights spatial uncertainty and heterogeneity in cluster-level activation quantification while remaining fully voxel-lattice based.
 
 ---
 
@@ -169,8 +294,9 @@ Each tool is maintained in its own repository. Please refer to the corresponding
    - **ceTDP-cons** (statistically guaranteed)
    - **ceTDP-appr** (heuristic but potentially tighter)
 
-4. Convert TDN to TDP if needed  
-5. Visualize results
+4. Convert TDN to TDP if needed
+5. (Optional) Generate layered ceTDP visualization maps 
+6. Visualize results
 
 ## Citation
 
