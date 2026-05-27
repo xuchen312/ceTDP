@@ -103,7 +103,7 @@ def main():
     parser.add_argument(
         '--table',
         required=True,
-        help='CSV with cluster id, tdp1, tdp2'
+        help='CSV with cluster_id,tdp1,tdp2'
     )
     
     parser.add_argument(
