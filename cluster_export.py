@@ -9,9 +9,9 @@ import nibabel as nib
 from scipy.ndimage import label
 
 
-# --------------------------------------------------
-# connectivity helper
-# --------------------------------------------------
+# ============================================================
+# Connectivity structure
+# ============================================================
 
 def get_structure(connectivity=18):
     """
@@ -24,13 +24,17 @@ def get_structure(connectivity=18):
     """
 
     if connectivity == 6:
-        structure = np.zeros((3, 3, 3), dtype=int)
+
+        structure = np.zeros((3, 3, 3), dtype=np.uint8)
+
         structure[1, 1, :] = 1
         structure[1, :, 1] = 1
         structure[:, 1, 1] = 1
 
     elif connectivity == 18:
-        structure = np.ones((3, 3, 3), dtype=int)
+
+        structure = np.ones((3, 3, 3), dtype=np.uint8)
+
         corners = [
             (0, 0, 0),
             (0, 0, 2),
@@ -41,43 +45,48 @@ def get_structure(connectivity=18):
             (2, 2, 0),
             (2, 2, 2),
         ]
+
         for c in corners:
             structure[c] = 0
 
     elif connectivity == 26:
-        structure = np.ones((3, 3, 3), dtype=int)
+
+        structure = np.ones((3, 3, 3), dtype=np.uint8)
 
     else:
-        raise ValueError("Connectivity must be one of: 6, 18, 26")
+
+        raise ValueError(
+            "Connectivity must be one of: 6, 18, 26"
+        )
 
     return structure
 
 
-# --------------------------------------------------
-# save cluster csv
-# --------------------------------------------------
+# ============================================================
+# Save cluster CSV
+# ============================================================
 
 def save_cluster_csv(outfile, ijk):
 
     df = pd.DataFrame({
-        'i': ijk[:, 0],
-        'j': ijk[:, 1],
-        'k': ijk[:, 2],
+        'x': ijk[:, 0],
+        'y': ijk[:, 1],
+        'z': ijk[:, 2],
     })
 
     df.to_csv(outfile, index=False)
 
 
-# --------------------------------------------------
-# main
-# --------------------------------------------------
+# ============================================================
+# Main
+# ============================================================
 
 def main():
 
     parser = argparse.ArgumentParser(
         description='Export suprathreshold clusters to CSV.'
     )
-    
+
     parser.add_argument(
         '--input',
         required=True,
@@ -109,7 +118,7 @@ def main():
         default=18,
         type=int,
         choices=[6, 18, 26],
-        help='3D connectivity'
+        help='3D connectivity (SPM-like default = 18)'
     )
 
     parser.add_argument(
@@ -127,49 +136,78 @@ def main():
     args = parser.parse_args()
 
     os.makedirs(args.outdir, exist_ok=True)
-    
-    # --------------------------------------------------
-    # load image
-    # --------------------------------------------------
+
+    # ============================================================
+    # Load image
+    # ============================================================
 
     img = nib.load(args.input)
+
     data = img.get_fdata()
 
-    # --------------------------------------------------
-    # thresholding
-    # --------------------------------------------------
+    # ============================================================
+    # Create binary mask
+    # ============================================================
 
     if args.absolute:
-        mask = np.abs(data) >= args.cdt
-    else:
-        mask = data >= args.cdt
 
-    # --------------------------------------------------
-    # connected component labeling
-    # --------------------------------------------------
+        mask = (
+            np.isfinite(data) &
+            (np.abs(data) >= args.cdt)
+        )
+
+    else:
+
+        mask = (
+            np.isfinite(data) &
+            (data >= args.cdt)
+        )
+
+    # force binary uint8
+    mask = mask.astype(np.uint8)
+
+    # ============================================================
+    # Connected-component labeling
+    # ============================================================
 
     structure = get_structure(args.connectivity)
 
-    labels, num = label(mask, structure=structure)
+    labels, num = label(
+        mask,
+        structure=structure
+    )
 
     print(f'Found {num} suprathreshold clusters.')
-    
-    # --------------------------------------------------
-    # ROI mode
-    # --------------------------------------------------
+
+    # ============================================================
+    # ROI MODE
+    # ============================================================
 
     if args.roi is not None:
 
         roi_img = nib.load(args.roi)
-        roi = roi_img.get_fdata()
 
-        roi_labels = np.unique(roi[roi > 0]).astype(int)
+        # IMPORTANT:
+        # round ROI labels to integers
+        roi = np.rint(
+            roi_img.get_fdata()
+        ).astype(np.int32)
+
+        roi_labels = np.unique(
+            roi[roi > 0]
+        )
 
         print(f'Found {len(roi_labels)} ROI labels.')
 
+        kval = args.extent - 1
+
         for roi_id in roi_labels:
 
-            roi_mask = (roi == roi_id) & (labels > 0)
+            # binary ROI mask
+            roi_mask = (
+                (roi == roi_id) &
+                (labels > 0)
+            ).astype(np.uint8)
 
             sublabels, subnum = label(
                 roi_mask,
@@ -179,43 +217,51 @@ def main():
             for j in range(1, subnum + 1):
 
                 idx = (sublabels == j)
-                clus_size = np.sum(idx)
 
-                if clus_size < args.extent:
+                clus_size = int(np.sum(idx))
+                
+                if clus_size <= kval:
                     continue
                 
-                ijk = np.argwhere(idx) + 1
+                ijk = np.column_stack(
+                    np.where(idx)
+                ) + 1
 
                 outfile = os.path.join(
                     args.outdir,
-                    f'roi{roi_id}_subclus{j}_size{clus_size}.csv'
+                    f'roi{roi_id}_subclus{j}_size{clus_size}_kval{kval}.csv'
                 )
-                
+
                 save_cluster_csv(outfile, ijk)
 
                 print(f'Wrote: {outfile}')
-                
-    # --------------------------------------------------
-    # whole-brain mode
-    # --------------------------------------------------
+
+    # ============================================================
+    # WHOLE-BRAIN MODE
+    # ============================================================
 
     else:
+
+        kval = args.extent - 1
 
         for i in range(1, num + 1):
 
             idx = (labels == i)
-            clus_size = np.sum(idx)
 
-            if clus_size < args.extent:
+            clus_size = int(np.sum(idx))
+            
+            if clus_size <= kval:
                 continue
 
-            ijk = np.argwhere(idx) + 1
+            ijk = np.column_stack(
+                np.where(idx)
+            ) + 1
 
             outfile = os.path.join(
                 args.outdir,
-                f'clus{i}_size{clus_size}.csv'
+                f'clus{i}_size{clus_size}_kval{kval}.csv'
             )
-            
+
             save_cluster_csv(outfile, ijk)
 
             print(f'Wrote: {outfile}')
