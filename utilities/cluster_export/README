@@ -13,7 +13,7 @@ The utility identifies connected supra-threshold clusters from statistical image
 - Whole-brain cluster extraction
 - ROI-overlapping subcluster extraction
 - Configurable 3D connectivity (6, 18, or 26)
-- Export of voxel and MNI/world coordinates
+- Export of voxel coordinates as CSV
 - Compatible with arbitrary NIfTI statistical maps
 - Available in both Python and MATLAB
 
@@ -65,8 +65,6 @@ Each CSV contains voxel coordinates:
 ```text
 x,y,z
 ```
-
-Depending on the selected options, additional MNI (world) coordinates may also be included.
 
 These CSV files provide the cluster information required for Stage 2 of ceTDP.
 
