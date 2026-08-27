@@ -1,0 +1,77 @@
+# Cluster Export Utility
+
+This utility extracts connected supra-threshold voxel clusters from statistical NIfTI images and exports voxel coordinates for downstream ceTDP analyses.
+
+Both **Python** (`cluster_export.py`) and **MATLAB** (`cluster_export.m`) implementations are provided.
+
+## Overview
+
+The utility identifies connected supra-threshold clusters from statistical images using a user-defined cluster-defining threshold (CDT) and minimum cluster extent. It can also extract ROI-overlapping subclusters for subsequent ceTDP analyses.
+
+### Features
+
+- Whole-brain cluster extraction
+- ROI-constrained subcluster extraction
+- Configurable 3D connectivity (6, 18, or 26)
+- Export of voxel and MNI/world coordinates
+- Compatible with arbitrary NIfTI statistical maps
+- Available in both Python and MATLAB
+
+## Python Implementation
+
+### Requirements
+
+```bash
+pip install nibabel numpy pandas scipy
+```
+
+### Basic Usage
+
+#### Whole-brain clustering
+
+```bash
+python cluster_export.py \
+    --input spmT_0001.nii \
+    --cdt 3.1 \
+    --extent 20
+```
+
+#### ROI-constrained clustering
+
+```bash
+python cluster_export.py \
+    --input spmT_0001.nii \
+    --roi AAL.nii.gz \
+    --cdt 3.1 \
+    --extent 20
+```
+
+## MATLAB Implementation
+
+Run from MATLAB:
+
+```matlab
+cluster_export
+```
+
+The MATLAB implementation provides equivalent functionality for extracting whole-brain clusters and ROI-overlapping subclusters.
+
+## Output
+
+CSV files are written to the output directory (default: `clusters/`).
+
+Each CSV contains voxel coordinates:
+
+```text
+x,y,z
+```
+
+Depending on the selected options, additional MNI/world coordinates may also be included.
+
+## Typical Workflow
+
+1. Load a statistical NIfTI image.
+2. Apply the cluster-defining threshold (CDT).
+3. Remove clusters below the minimum extent.
+4. (Optional) Restrict clusters to an ROI.
+5. Export voxel coordinates as CSV files for downstream ceTDP analyses.
