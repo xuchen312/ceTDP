@@ -6,7 +6,7 @@ Both **Python** (`cluster_export.py`) and **MATLAB** (`cluster_export.m`) implem
 
 ## Overview
 
-The utility identifies connected supra-threshold clusters from statistical images using a user-defined **cluster-forming threshold (CFT)** and **cluster-size threshold (`k`)**. It can also extract ROI-overlapping subclusters to prepare the cluster information required for Stage 2 of ceTDP.
+The utility identifies connected supra-threshold clusters from statistical images using a user-defined **cluster-forming threshold (CFT)** and **cluster-extent threshold (`k`)**. It can also extract ROI-overlapping subclusters to prepare the cluster information required for Stage 2 of ceTDP.
 
 ### Features
 
@@ -71,7 +71,7 @@ These CSV files provide the cluster information required for Stage 2 of ceTDP.
 ## Typical Workflow
 
 1. Load a statistical NIfTI image.
-2. Apply the cluster-forming threshold (CFT).
-3. Remove clusters smaller than the cluster-size threshold (`k`).
+2. Apply the CFT.
+3. Remove clusters smaller than the cluster extent threshold (`k`).
 4. *(Optional)* Restrict clusters to user-defined ROIs.
 5. Export voxel coordinates as CSV files for Stage 2 ceTDP analyses.
