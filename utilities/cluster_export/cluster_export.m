@@ -1,7 +1,7 @@
 function cluster_export(minClusSz,xSPM,cdt,ROI)
 % Generate cluster information CSV files.
 % 
-% INPUTS:
+% INPUTS (mandatory):
 % minClusSz - Minimum significant cluster size
 %
 % Inputs (optional):
