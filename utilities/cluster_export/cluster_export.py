@@ -80,12 +80,12 @@ def main():
         '--input', 
         required=True, 
         help='Input statistical map (NIfTI)')
-
+    
     parser.add_argument(
-        '--cdt', 
-        required=True, 
-        type=float, 
-        help='Cluster-defining threshold')
+        '--cdt',
+        required=True,
+        type=float,
+        help='Cluster-defining threshold in statistic units (T/Z/F), not p-value')
 
     parser.add_argument(
         '--extent', 
@@ -109,7 +109,7 @@ def main():
     parser.add_argument(
         '--absolute',
         action='store_true',
-        help='Use abs(statmap) >= CDT'
+        help='Use abs(statistic map) >= CDT'
     )
 
     parser.add_argument(
@@ -119,6 +119,17 @@ def main():
     )
 
     args = parser.parse_args()
+
+    # ============================================================
+    # Python version expects a statistic threshold, not a p-value
+    # ============================================================
+    
+    if args.cdt <= 1:
+        raise ValueError(
+            "The Python version expects --cdt to be a statistic threshold "
+            "(e.g., T = 3.17), not an uncorrected p-value such as 0.001. "
+            "Convert the p-value to its corresponding statistic threshold first."
+        )
     
     os.makedirs(args.outdir, exist_ok=True)
 
