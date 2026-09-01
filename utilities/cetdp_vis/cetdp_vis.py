@@ -119,7 +119,6 @@ def main():
     # --------------------------------------------------------
     # load cluster image
     # --------------------------------------------------------
-
     clus_img = nib.load(args.cluster)
     
     clus = clus_img.get_fdata()
@@ -127,7 +126,6 @@ def main():
     # --------------------------------------------------------
     # validate cluster labels
     # --------------------------------------------------------
-
     if not np.allclose(clus, np.round(clus)):
         raise ValueError('Cluster image must contain integer labels')
 
@@ -136,7 +134,6 @@ def main():
     # --------------------------------------------------------
     # load table
     # --------------------------------------------------------
-
     tab = pd.read_csv(args.table)
 
     required_cols = ['cluster_id', 'tdp1', 'tdp2']
@@ -148,13 +145,11 @@ def main():
     # --------------------------------------------------------
     # initialize output
     # --------------------------------------------------------
-
     out = np.zeros(clus.shape, dtype=np.float32)
 
     # --------------------------------------------------------
     # process clusters
     # --------------------------------------------------------
-
     for _, row in tab.iterrows():
         
         cid = int(row['cluster_id'])
@@ -179,15 +174,12 @@ def main():
         # --------------------------------------------
         # assign values
         # --------------------------------------------
-
         out[interior] = tdp1
-
         out[boundary] = tdp2
 
     # --------------------------------------------------------
     # save
     # --------------------------------------------------------
-    
     print(
         f'Rendered {len(tab)} clusters '
         f'using {args.connectivity}-connectivity.'
@@ -197,10 +189,8 @@ def main():
 
     print('Done.')
 
-
 # ============================================================
 # entry
 # ============================================================
-
 if __name__ == '__main__':
     main()
