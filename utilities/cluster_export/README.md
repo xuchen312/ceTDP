@@ -58,7 +58,7 @@ python cluster_export.py \
 | `--absolute` | Use `abs(statistic) >= CDT` instead of `statistic >= CDT` |
 | `--outdir` | Output directory (default: `clusters/`) |
 
-### CFT Input
+### CDT Input
 
 In the Python implementation, `--cdt` must be provided as a **statistic threshold**, such as a T, Z, or F value.
 
@@ -169,9 +169,39 @@ cluster_export(20, xSPM, 0.001)
 
 ## Output
 
-CSV files are written to the output directory (default: `clusters/`).
+The utility exports cluster voxel coordinates as CSV files.
 
-Each CSV contains voxel coordinates:
+### Python
+
+By default, CSV files are written to
+
+```bash
+clusters/
+```
+
+The output directory can be changed using:
+
+```bash
+--outdir <directory>
+```
+
+For example:
+
+```bash
+python cluster_export.py \
+    --input spmT_0001.nii \
+    --cdt 3.1 \
+    --extent 20 \
+    --outdir results
+```
+
+### MATLAB
+
+The MATLAB implementation saves CSV files directly to the current working directory. It does not create a separate output directory by default.
+
+### CSV Contents
+
+Each CSV file contains voxel coordinates:
 
 ```text
 x,y,z
@@ -181,17 +211,17 @@ x,y,z
 ...
 ```
 
-The exported voxel coordinates are **1-based voxel indices**, consistent with MATLAB/SPM indexing.
+The exported voxel coordinates are 1-based voxel indices, consistent with MATLAB/SPM indexing.
 
 ### Whole-brain clusters
 
-Whole-brain clusters are exported as separate CSV files.
+When no ROI is specified, surviving supra-threshold clusters are exported as separate CSV files.
 
 ### ROI-overlapping subclusters
 
-When an ROI atlas is provided, supra-threshold clusters are intersected with the ROI, and connected ROI-overlapping subclusters are exported separately.
+When an ROI atlas is provided, the utility intersects the supra-threshold clusters with the ROI and identifies connected ROI-overlapping subclusters. Each surviving subcluster is exported as a separate CSV file.
 
-These CSV files provide the cluster information required for Stage 2 of ceTDP.
+The resulting CSV files provide the cluster information required for subsequent Stage 2 ceTDP analyses.
 
 ## Typical Workflow
 
