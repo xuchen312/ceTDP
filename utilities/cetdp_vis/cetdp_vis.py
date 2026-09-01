@@ -18,10 +18,10 @@ Example:
     python cetdp_vis.py
     
     python cetdp_vis.py \
-    --cluster clus.nii.gz \
-    --table tdps.csv \
-    --connectivity 26 \
-    --output cetdp_vis.nii.gz
+        --cluster clus.nii.gz \
+        --table tdps.csv \
+        --connectivity 26 \
+        --output cetdp_vis.nii.gz
 """
 
 import argparse
