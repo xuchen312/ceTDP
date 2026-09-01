@@ -6,7 +6,7 @@ Both **Python** (`cluster_export.py`) and **MATLAB** (`cluster_export.m`) implem
 
 ## Overview
 
-The utility identifies connected supra-threshold clusters from statistical images using a user-defined **cluster-forming threshold (CFT)** and **cluster-extent threshold (`k`)**. It can also extract ROI-overlapping subclusters to prepare the cluster information required for Stage 2 of ceTDP.
+The utility identifies connected supra-threshold clusters from statistical images using a user-defined **cluster-defining threshold (CDT)** and **cluster-extent threshold (`k`)**. It can also extract ROI-overlapping subclusters to prepare the cluster information required for Stage 2 of ceTDP.
 
 ### Features
 
@@ -51,11 +51,11 @@ python cluster_export.py \
 | Argument | Description |
 |----------|-------------|
 | `--input` | Input statistical NIfTI image |
-| `--cdt` | Cluster-forming threshold in statistic units (T/Z/F), not p-value |
+| `--cdt` | Cluster-defining threshold in statistic units (T/Z/F), not p-value |
 | `--extent` | Minimum cluster-extent threshold (`k`) |
 | `--roi` | Optional ROI atlas NIfTI |
 | `--connectivity` | 3D connectivity: 6, 18, or 26 (default: 18) |
-| `--absolute` | Use `abs(statistic) >= CFT` instead of `statistic >= CFT` |
+| `--absolute` | Use `abs(statistic) >= CDT` instead of `statistic >= CDT` |
 | `--outdir` | Output directory (default: `clusters/`) |
 
 ### CFT Input
@@ -76,7 +76,7 @@ For example, the following is not valid:
 --cdt 0.001
 ```
 
-If the CFT is defined by an uncorrected p-value, it must first be converted to the corresponding statistic threshold using the appropriate statistical model and degrees of freedom.
+If the CDT is defined by an uncorrected p-value, it must first be converted to the corresponding statistic threshold using the appropriate statistical model and degrees of freedom.
 
 > **Note:** The MATLAB implementation can accept an uncorrected p-value as `cdt` when an `xSPM` structure is provided, using SPM's statistical information for the conversion.
 
@@ -103,13 +103,13 @@ These correspond to:
 By default, the Python implementation extracts voxels satisfying:
 
 ```text
-statistic >= CFT
+statistic >= CDT
 ```
 
 The optional `--absolute` flag instead uses:
 
 ```text
-abs(statistic) >= CFT
+abs(statistic) >= CDT
 ```
 
 For example:
@@ -143,7 +143,7 @@ cluster_export
 The function can also be called with the minimum cluster extent threshold:
 
 ```matlab
-cluster_export(20)
+cluster_export(minClusSz)
 ```
 
 The full interface is:
@@ -154,7 +154,7 @@ cluster_export(minClusSz, xSPM, cdt, ROI)
 
 where:
 
-- `minClusSz` — minimum cluster-size threshold
+- `minClusSz` — minimum cluster-extent threshold
 - `xSPM` — *optional* SPM results structure
 - `cdt` — *optional* cluster-defining threshold
 - `ROI` — *optional* ROI NIfTI file or ROI volume
