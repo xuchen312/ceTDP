@@ -1,8 +1,8 @@
 # ceTDP Visualization Utility
 
-This utility generates layered voxelwise ceTDP visualization maps from cluster label images and cluster-level TDP estimates.
+This utility generates layered voxel-wise ceTDP visualization maps from cluster label images and cluster-level TDP estimates.
 
-The output is a NIfTI image that can be visualized using standard neuroimaging software such as **FSLeyes**, **MRIcroGL**, **ITK-SNAP**, or **nilearn**.
+The output is a NIfTI image that can be visualized using standard neuroimaging software such as **FSLeyes**, **MRIcron**, or **Nilearn**.
 
 ## Overview
 
@@ -97,7 +97,7 @@ Supported connectivity values:
 
 ## Output
 
-The utility generates a voxelwise layered visualization map:
+The utility generates a voxel-wise layered visualization map:
 
 ```text
 cetdp_vis.nii.gz
@@ -116,9 +116,8 @@ Voxel values represent:
 The generated NIfTI image can be opened directly in:
 
 - FSLeyes
-- MRIcroGL
-- ITK-SNAP
-- nilearn
+- MRIcron
+- Nilearn
 
 Example:
 
