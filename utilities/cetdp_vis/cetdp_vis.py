@@ -36,11 +36,9 @@ from scipy.ndimage import (
     generate_binary_structure
 )
 
-
 # ============================================================
 # boundary extraction
 # ============================================================
-
 def extract_boundary(mask, connectivity):
 
     if connectivity == 6:
@@ -61,11 +59,9 @@ def extract_boundary(mask, connectivity):
 
     return boundary
 
-
 # ============================================================
 # save nifti
 # ============================================================
-
 def save_nifti(data, outfile, template_img):
 
     outdir = os.path.dirname(outfile)
@@ -83,11 +79,9 @@ def save_nifti(data, outfile, template_img):
 
     print(f"Saved: {outfile}")
 
-
 # ============================================================
 # main
 # ============================================================
-
 def main():
 
     parser = argparse.ArgumentParser(
@@ -103,7 +97,7 @@ def main():
     parser.add_argument(
         '--table',
         required=True,
-        help='CSV with cluster_id,tdp1,tdp2'
+        help='CSV with cluster_id, tdp1, tdp2'
     )
     
     parser.add_argument(
