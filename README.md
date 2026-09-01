@@ -34,7 +34,7 @@ Two complementary algorithms are provided:
 | **Stage 1** | **ceTDP-k** | Minimum significant cluster extent threshold (`k`) |
 | **Stage 1** | **Region specification** | Selected regions and corresponding cluster information |
 | **Stage 2** | **ceTDP-cons / ceTDP-appr** | Lower bound on the TDN |
-| **Final result** | **TDP** | `TDP = TDN / \|S\|` |
+| **Stage 2** | **TDP** | `TDP = TDN / \|S\|` |
 
 ## Software Suite
 
