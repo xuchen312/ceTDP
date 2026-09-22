@@ -1,6 +1,6 @@
 # ceTDP
 
-**ceTDP** is a two-stage framework for valid and quantitative cluster-extent inference in neuroimaging. It estimates lower bounds on the **True Discovery Proportion (TDP)**, i.e., the proportion of truly activated voxels within a selected region, while maintaining family-wise error rate (FWER) control.
+**ceTDP** is a two-stage framework for valid and quantitative cluster-extent inference in neuroimaging. It estimates lower bounds on the **True Discovery Proportion (TDP)**, i.e., the proportion of truly activated voxels within a candidate region, while maintaining family-wise error rate (FWER) control.
 
 Unlike conventional cluster-extent inference, ceTDP supports quantitative inference within significant clusters, anatomical regions, and arbitrary user-defined regions.
 
@@ -10,30 +10,30 @@ The ceTDP framework consists of two stages.
 
 ### Stage 1: Cluster extent threshold computation and region specification
 
-Stage 1 determines the minimum significant cluster extent threshold (`k`) using either parametric (Random Field Theory) or nonparametric (permutation-based) inference. Regions for subsequent inference are then defined, and the corresponding cluster information is prepared for Stage 2.
+Stage 1 determines the minimum significant cluster extent threshold (`k`) using either parametric (Random Field Theory) or nonparametric (permutation-based) inference. Regions for subsequent inference are then defined, and the corresponding connected-component files are prepared for Stage 2.
 
-ROI specification is optional. When no ROI is specified, significant supra-threshold clusters can be used directly as the regions of inference.
+ROI specification is optional. When no ROI is specified, significant supra-threshold clusters (STCs) can be used directly as the regions of inference.
 
-### Stage 2: TDP bound estimation
+### Stage 2: TDN/TDP lower-bound estimation
 
-Given the Stage 1 outputs, ceTDP estimates lower bounds on the **True Discovery Number (TDN)** within each selected region. The **True Discovery Proportion (TDP)** is obtained by
+Given the Stage 1 outputs, ceTDP estimates lower bounds on the **True Discovery Number (TDN)** within each candidate region. The **True Discovery Proportion (TDP)** is obtained by
 
 > **TDP = TDN / |S|**
 
-where `|S|` denotes the number of voxels in the selected region.
+where `|S|` denotes the number of voxels in the candidate region.
 
 Two complementary algorithms are provided:
 
-- **ceTDP-cons** — exact, non-iterative conservative lower bounds with strict FWER control.
-- **ceTDP-appr** — heuristic approximate lower bounds that are often tighter but do not guarantee the global optimum.
+- **ceTDP-cons** - exact, non-iterative conservative lower bounds with strict FWER control.
+- **ceTDP-heur** - heuristic estimates of the TDP lower bound that are often tighter but do not guarantee the global optimum.
 
 ## Workflow
 
 | Stage | Component | Main output |
 |------|-----------|-------------|
 | **Stage 1** | **ceTDP-k** | Minimum significant cluster extent threshold (`k`) |
-| **Stage 1** | **Region specification** | Selected regions and corresponding cluster information |
-| **Stage 2** | **ceTDP-cons / ceTDP-appr** | Lower bound on the TDN |
+| **Stage 1** | **Region specification** | Candidate regions and corresponding connected-component information |
+| **Stage 2** | **ceTDP-cons / ceTDP-heur** | Conservative TDN lower bound / heuristic TDN estimate |
 | **Stage 2** | **TDP** | `TDP = TDN / \|S\|` |
 
 ## Software Suite
@@ -83,22 +83,22 @@ Region specification is a separate part of Stage 1. The corresponding cluster in
 
 Computes exact, non-iterative conservative lower bounds on the TDN.
 
-### Stage 2: Approximate inference (ceTDP-appr)
+### Stage 2: Heuristic estimation (ceTDP-heur)
 
 | Tool | Language | Repository |
 |------|----------|------------|
-| **ceTDP-appr** | C | [ceTDP-appr](https://github.com/ppgorecki/ceTDP-appr) |
+| **ceTDP-heur** | C | [ceTDP-heur](https://github.com/ppgorecki/ceTDP-heur) |
 
-Computes heuristic approximate lower bounds on the TDN.
+Computes heuristic estimates of the TDN lower bound.
 
 ## Utilities
 
-This repository also provides auxiliary utilities for **region specification** and **visualization**. These tools facilitate data preparation and visualization but are **not part of the core ceTDP inferential procedure**.
+This repository also provides auxiliary utilities for **region specification** and **visualization**. These tools support Stage 1 region specification and visualization but are **not part of the core TDP inferential procedure performed in Stage 2**.
 
 | Tool | Description |
 |------|-------------|
-| **cluster_export** | Export supra-threshold clusters and ROI-overlapping subclusters as CSV (MATLAB & Python) |
-| **cetdp_vis** | Generate layered voxel-wise ceTDP visualization maps |
+| **cluster_export** | Export connected components as CSV from significant STCs or from the intersection of STCs with specified regions (MATLAB & Python) |
+| **cetdp_vis** | Generate a NIfTI visualization map encoding both conservative and heuristic TDP results |
 
 See `utilities/README.md` for detailed documentation.
 
@@ -106,9 +106,9 @@ See `utilities/README.md` for detailed documentation.
 
 1. **Run ceTDP-k** to compute the minimum significant cluster extent threshold (`k`).
 2. **Define the regions for inference** and prepare the corresponding cluster information files. ROI specification is optional; significant supra-threshold clusters can be used directly when no ROI is specified.
-3. **Run ceTDP-cons** or **ceTDP-appr** to estimate TDN lower bounds.
+3. **Run ceTDP-cons** or **ceTDP-heur** to obtain conservative TDN lower bounds or heuristic TDN estimates.
 4. **Convert TDN to TDP** using `TDP = TDN / |S|`.
-5. *(Optional)* Generate layered voxel-wise visualization maps using **cetdp_vis**.
+5. *(Optional)* Generate a voxel-wise visualization map encoding both TDP results using **cetdp_vis**.
 
 ## Citation
 
