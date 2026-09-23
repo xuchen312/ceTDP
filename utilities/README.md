@@ -1,12 +1,12 @@
 # ceTDP Utilities
 
-Auxiliary tools for preprocessing and visualization.
+Auxiliary tools for Stage 1 region specification and visualization.
 
 ## Available tools
 
 ### cluster_export
 
-Export connected supra-threshold clusters and ROI-overlapping subclusters from statistical NIfTI images.
+Export connected components from significant supra-threshold clusters (STCs) or from the intersection of STCs with specified regions as CSV.
 
 Implementations:
 
@@ -17,7 +17,7 @@ See `cluster_export/README.md`.
 
 ### cetdp_vis
 
-Generate layered voxel-wise visualization maps from cluster-level ceTDP estimates.
+Generate a voxel-wise NIfTI visualization map encoding both conservative and heuristic TDP results.
 
 Implementation:
 
