@@ -60,11 +60,9 @@ Stage 1 includes cluster extent threshold computation and region specification. 
 
 | Tool | Language | Description | Repository |
 |------|----------|-------------|------------|
-| **ceTDP-k-SPM** | MATLAB | Parametric (SPM) | ceTDP-k |
-| **ceTDP-k-FSL** | FSL | Parametric (FSL pipeline) | ceTDP-k |
-| **ceTDP-k-R** | R / C++ | Nonparametric permutation inference | ceTDP-k |
-
-Repository: [**ceTDP-k**](https://github.com/xuchen312/ceTDP-k)
+| **ceTDP-k-SPM** | MATLAB | Parametric (SPM) | [**ceTDP-k**](https://github.com/xuchen312/ceTDP-k) |
+| **ceTDP-k-FSL** | FSL | Parametric (FSL pipeline) | [**ceTDP-k**](https://github.com/xuchen312/ceTDP-k) |
+| **ceTDP-k-R** | R / C++ | Nonparametric permutation inference | [**ceTDP-k**](https://github.com/xuchen312/ceTDP-k) |
 
 Primary output:
 
