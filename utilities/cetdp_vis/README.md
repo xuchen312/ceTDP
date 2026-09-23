@@ -2,7 +2,7 @@
 
 This utility generates a voxel-wise NIfTI visualization map encoding both conservative and heuristic ceTDP results from cluster label images and cluster-level TDP measures.
 
-The output is a NIfTI image that can be visualized using standard neuroimaging software such as **FSLeyes**, **MRIcron**, or **Nilearn**.
+The output is a NIfTI image that can be visualized using standard neuroimaging software such as FSLeyes, MRIcron, or Nilearn.
 
 ## Overview
 
