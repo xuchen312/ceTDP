@@ -1,22 +1,22 @@
 # ceTDP Visualization Utility
 
-This utility generates layered voxel-wise ceTDP visualization maps from cluster label images and cluster-level TDP estimates.
+This utility generates a voxel-wise NIfTI visualization map encoding both conservative and heuristic ceTDP results from cluster label images and cluster-level TDP measures.
 
 The output is a NIfTI image that can be visualized using standard neuroimaging software such as **FSLeyes**, **MRIcron**, or **Nilearn**.
 
 ## Overview
 
-For each cluster, the visualization combines the two ceTDP inference methods:
+For each cluster, the visualization combines the two ceTDP measures:
 
-- **Cluster interior:** conservative ceTDP-cons TDP values
-- **Inner boundary:** approximate ceTDP-appr TDP values
+- **Cluster interior:** conservative TDP lower bounds (ceTDP-cons)
+- **Inner boundary:** heuristic TDP estimates (ceTDP-heur)
 
-This layered representation highlights spatial heterogeneity while remaining fully voxel-lattice based.
+This layered representation provides an intuitive visualization of the complementary TDP measures while remaining fully voxel-lattice based.
 
 ## Features
 
 - Layered ceTDP visualization
-- Inner-boundary enhancement
+- Conservative interior and heuristic boundary encoding
 - Configurable 3D connectivity (6, 18, or 26)
 - Command-line interface
 - Direct NIfTI output
@@ -47,7 +47,7 @@ Label convention:
 
 ### 2. Cluster-level TDP table
 
-A CSV file containing ceTDP estimates for each cluster:
+A CSV file containing the two cluster-level ceTDP measures for each cluster, e.g.,
 
 ```csv
 cluster_id,tdp1,tdp2
@@ -58,8 +58,8 @@ cluster_id,tdp1,tdp2
 
 where:
 
-- `tdp1` = ceTDP-cons TDP estimate
-- `tdp2` = ceTDP-appr TDP estimate
+- `tdp1` = conservative TDP lower bound (ceTDP-cons)
+- `tdp2` = heuristic TDP estimate (ceTDP-heur)
 
 ## Usage
 
@@ -89,7 +89,7 @@ python cetdp_vis.py \
     --connectivity 6
 ```
 
-Supported connectivity values:
+Supported 3D connectivity values:
 
 - 6
 - 18
@@ -105,10 +105,10 @@ cetdp_vis.nii.gz
 
 Voxel values represent:
 
-| Region | Value source |
+| Region | Encoded Measure |
 |---------|--------------|
-| Cluster interior | ceTDP-cons |
-| Inner boundary | ceTDP-appr |
+| Cluster interior | Conservative TDP lower bound (ceTDP-cons) |
+| Inner boundary | Heuristic TDP estimate (ceTDP-heur) |
 | Background | 0 |
 
 ## Visualization
@@ -127,6 +127,6 @@ fsleyes cetdp_vis.nii.gz
 
 ## Visualization Rationale
 
-The layered visualization combines conservative ceTDP-cons estimates within cluster interiors with potentially tighter ceTDP-appr estimates along cluster boundaries.
+The layered visualization encodes conservative TDP lower bounds within cluster interiors and heuristic TDP estimates (typically tighter) along cluster boundaries.
 
-This provides an intuitive visualization of spatial uncertainty and heterogeneity in cluster-level activation quantification while preserving the voxel lattice structure.
+This provides an intuitive visualization of complementary TDP measures while preserving the voxel lattice structure.
