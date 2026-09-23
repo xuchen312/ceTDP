@@ -1,17 +1,17 @@
 # Cluster Export Utility
 
-This utility extracts connected supra-threshold clusters from statistical NIfTI images and exports voxel coordinates for downstream ceTDP analyses.
+This utility extracts connected components from significant supra-threshold clusters (STCs) or from the intersection of STCs with specified regions, and exports voxel coordinates for downstream ceTDP analyses.
 
 Both **Python** (`cluster_export.py`) and **MATLAB** (`cluster_export.m`) implementations are provided.
 
 ## Overview
 
-The utility identifies connected supra-threshold clusters from statistical images using a user-defined **cluster-defining threshold (CDT)** and **cluster-extent threshold (`k`)**. It can also extract ROI-overlapping subclusters to prepare the cluster information required for Stage 2 of ceTDP.
+The utility identifies connected STCs from statistical images using a user-defined **cluster-defining threshold (CDT)** and **cluster-extent threshold (`k`)**. It can also extract connected components from the intersection of significant STCs with specified regions to prepare the cluster information required for Stage 2 of ceTDP.
 
 ### Features
 
-- Whole-brain cluster extraction
-- ROI-overlapping subcluster extraction
+- Connected-component extraction from significant STCs
+- Connected-component extraction from STC-region intersections
 - Configurable 3D connectivity
 - Export of voxel coordinates as CSV
 - Compatible with arbitrary NIfTI statistical maps
@@ -36,7 +36,7 @@ python cluster_export.py \
     --extent 20
 ```
 
-#### ROI-overlapping subclusters
+#### Connected components from STC–ROI intersections
 
 ```bash
 python cluster_export.py \
@@ -51,9 +51,9 @@ python cluster_export.py \
 | Argument | Description |
 |----------|-------------|
 | `--input` | Input statistical NIfTI image |
-| `--cdt` | Cluster-defining threshold in statistic units (T/Z/F), not p-value |
+| `--cdt` | CDT in statistic units (T/Z/F), not p-value |
 | `--extent` | Minimum cluster-extent threshold (`k`) |
-| `--roi` | Optional ROI atlas NIfTI |
+| `--roi` | Optional ROI or region NIfTI mask |
 | `--connectivity` | 3D connectivity: 6, 18, or 26 (default: 18) |
 | `--absolute` | Use `abs(statistic) >= CDT` instead of `statistic >= CDT` |
 | `--outdir` | Output directory (default: `clusters/`) |
@@ -157,7 +157,7 @@ where:
 - `minClusSz` — minimum cluster-extent threshold
 - `xSPM` — *optional* SPM results structure
 - `cdt` — *optional* cluster-defining threshold
-- `ROI` — *optional* ROI NIfTI file or ROI volume
+- `ROI` — *optional* NIfTI file or volume defining specified regions
 
 When `xSPM` is provided, an uncorrected p-value can be supplied as `cdt` and converted to the corresponding statistic threshold using SPM.
 
@@ -201,7 +201,7 @@ The MATLAB implementation saves CSV files directly to the current working direct
 
 ### CSV Contents
 
-Each CSV file contains voxel coordinates:
+Each CSV file contains voxel coordinates, e.g.,
 
 ```text
 x,y,z
@@ -215,23 +215,23 @@ The exported voxel coordinates are 1-based voxel indices, consistent with MATLAB
 
 ### Whole-brain clusters
 
-When no ROI is specified, surviving supra-threshold clusters are exported as separate CSV files.
+When no region is specified, surviving STCs are exported as separate CSV files.
 
-### ROI-overlapping subclusters
+### Connected components from STC–ROI intersections
 
-When an ROI atlas is provided, the utility intersects the supra-threshold clusters with the ROI and identifies connected ROI-overlapping subclusters. Each surviving subcluster is exported as a separate CSV file.
+When an ROI mask is provided, the utility intersects the significant STCs with the specified regions and identifies connected components within the intersection. Each connected component is exported as a separate CSV file.
 
-The resulting CSV files provide the cluster information required for subsequent Stage 2 ceTDP analyses.
+The resulting CSV files provide the connected-component information required for subsequent Stage 2 ceTDP analyses.
 
 ## Typical Workflow
 
 1. Obtain a statistical NIfTI image.
 2. Determine the appropriate CDT.
 3. Determine the cluster-extent threshold (`k`) using **ceTDP-k**.
-4. Extract significant supra-threshold clusters.
-5. *(Optional)* Provide an ROI atlas to extract ROI-overlapping subclusters.
+4. Extract connected components from the significant STCs.
+5. *(Optional)* Specify an ROI mask to extract connected components from its intersection with the significant STCs.
 6. Export voxel coordinates as CSV files.
-7. Use the resulting CSV files as cluster information for Stage 2 of ceTDP.
+7. Use the resulting CSV files as connected-component information for Stage 2 of ceTDP.
 
 ### Example
 
@@ -245,6 +245,6 @@ python cluster_export.py \
 
 ## Notes
 
-This utility performs **cluster extraction** based on supplied CDT and cluster-extent threshold (`k`). It does not determine the statistical CDT or perform the Stage 2 TDN/TDP inference itself.
+This utility performs **connected-component extraction** from significant STCs based on the supplied CDT and cluster-extent threshold (`k`). It does not determine the statistical CDT or perform the core Stage 2 TDN/TDP inference itself.
 
 The appropriate CDT and `k` should therefore be determined by the corresponding statistical analysis and **ceTDP-k** procedure.
