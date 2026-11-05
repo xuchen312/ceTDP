@@ -75,7 +75,7 @@ Region specification is a separate part of Stage 1. The corresponding cluster in
 | Tool | Language | Repository |
 |------|----------|------------|
 | **ceTDP-cons-SPM** | MATLAB | [ceTDP-cons-SPM](https://github.com/xuchen312/ceTDP-cons-SPM) |
-| **ceTDP-cons-C** | C | [ceTDP-cons-C](https://github.com/rmonajemi/ceTDP-cons-C) |
+| **ceTDP-cons-C** | C | [ceTDP-cons-C](https://github.com/rmonajemi/fMRI) |
 | **ceTDP-cons-R** | R | [ceTDP-cons-R](https://github.com/xuchen312/ceTDP-cons-R) |
 | **ceTDP-cons-Python** | Python | [ceTDP-cons-Python](https://github.com/xuchen312/ceTDP-cons-Python) |
 
@@ -85,7 +85,7 @@ Computes exact, non-iterative conservative lower bounds on the TDN.
 
 | Tool | Language | Repository |
 |------|----------|------------|
-| **ceTDP-heur** | C | [ceTDP-heur](https://github.com/ppgorecki/ceTDP-heur) |
+| **ceTDP-heur** | C | [ceTDP-heur](https://github.com/ppgorecki/TDPClusters) |
 
 Computes heuristic estimates of the TDN lower bound.
 
